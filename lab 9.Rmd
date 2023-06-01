@@ -1,0 +1,93 @@
+---
+title: "R Notebook"
+output:
+  word_document: default
+  html_notebook: default
+---
+
+
+
+```{r}
+library(carData)
+```
+```{r}
+r=Prestige
+r
+```
+```{r}
+View(r)
+```
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+ggplot(data=r, aes(r$income)) +
+geom_histogram()
+```
+```{r}
+qplot(r$census,
+geom="histogram",
+binwidth=500,
+main="Histogram for Census",
+xlab="census",
+fill=I("red"),
+col=I("blue"),
+)
+```
+```{r}
+library(ggplot2)
+ggplot(r, aes(x=education , y=income )) + geom_point()
+```
+```{r}
+ggplot(r, aes(x=education, y=income)) +
+geom_point()+
+geom_smooth(method=lm)
+```
+#here in the simple linear regression its showing that 
+
+```{r}
+str(r)
+```
+```{r}
+dim(r)
+str(r)
+colnames(r)
+summary(r)
+```
+```{r}
+plot(education~income, data=r,pch=16, col='red')
+```
+```{r}
+relation=lm(education~income, data=r)
+plot(education~income, data=r,pch=16, col='blue')
+abline(coef(relation))
+```
+```{r}
+library(ggplot2)
+ggplot(r, aes(x=women, y=income))+ geom_point()+ geom_point(aes(col=type))
+```
+```{r}
+library(ISLR)
+attach (Auto)
+```
+```{r}
+head(Auto)
+```
+```{r}
+pairs(Auto)
+```
+```{r}
+str(Auto)
+```
+```{r}
+cor(Auto[,c(1:7)])
+```
+```{r}
+model2=lm(mpg~cylinders+displacement+horsepower+weight+acceleration+year+origin,data = Auto)
+summary(model2)
+```
+
+
+

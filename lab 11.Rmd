@@ -1,0 +1,92 @@
+---
+title: "Jolinson Richi 21122030"
+output: word_document
+---
+
+```{r}
+car = read.csv("C:\\Users\\jolin\\Downloads\\car_evaluation - car_evaluation (1).csv")
+car
+```
+```{r}
+View(car)
+```
+
+```{r}
+colnames(car)=c("buying","maint","doors","persons","lug_boot","safety","class")
+set.seed(777)
+```
+
+```{r}
+library(dplyr)
+dim(car)
+glimpse(car)
+summary(car)
+```
+```{r}
+library(ggplot2)
+ggplot(car,aes(x=class,fill=lug_boot))+geom_histogram(stat="count")+labs(title="Class Vs Luggage boot",subtitle="Histogram",y="Frequency of Luggage boot",x="Class")
+```
+
+```{r}
+ggplot(car,aes(x=class,fill=doors))+geom_histogram(stat="count")+labs(title="Class Vs Doors",subtitle="Histogram",y="Frequency of Doors",x="Class")
+```
+```{r}
+ggplot(data = car,aes(fill=as.factor(doors),x=persons))+geom_density(alpha=0.3)
+```
+```{r}
+ggplot(data = car,aes(fill=as.factor(maint),x=class))+geom_density(alpha=0.3)+facet_wrap(~class)
+```
+```{r}
+library(caTools)
+shuffle_index=sample(1:nrow(car))
+car=car[shuffle_index,]
+split=sample.split(car$class,SplitRatio = 0.8)
+head(split)
+```
+```{r}
+training_set=subset(car,split==TRUE)
+testing_set=subset(car,split==FALSE)
+```
+
+```{r}
+
+View(training_set)
+
+```
+
+```{r}
+View(testing_set)
+```
+
+```{r}
+library(rpart)
+```
+
+```{r}
+library(rpart.plot)
+```
+
+```{r}
+fit=rpart(formula = class ~ .,data=training_set,method = "class")
+predict_unseen=predict(object = fit,newdata = testing_set,type = "class")
+fit1=rpart(formula = class ~ (safety+buying+persons),data=training_set,method = "class")
+fit2=rpart(formula = class ~ (safety+maint+persons),data=training_set,method = "class")
+fit3=rpart(formula = class ~ (safety+buying+maint+persons),data=training_set,method = "class")
+```
+
+```{r}
+rpart.plot(fit,cex = 0.50)
+```
+```{r}
+rpart.plot(fit1)
+```
+
+```{r}
+rpart.plot(fit2)
+```
+```{r}
+rpart.plot(fit3,cex = 0.50)
+```
+
+
+

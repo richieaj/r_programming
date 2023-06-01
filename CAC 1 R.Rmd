@@ -1,0 +1,116 @@
+---
+title: "Jolinson Richi A"
+rollno: '21122030'
+output:
+  word_document: default
+  html_notebook: default
+---
+ 
+# Importing the data set (downloaded from kaggle)
+```{r}
+wine=read.csv("D:\\AJR\\RfrML\\Wine dataset\\winequality-red.csv")
+head(wine)
+```
+
+
+# summary function gives the statistical summary of the data it consist of 6 summaries for each variable
+
+```{r}
+summary(wine)
+```
+#str is a fucntion that Compactly display the internal structure of an R object, a diagnostic function and an alternative to summary so in this code 
+# its executing the wine data's structure
+
+```{r}
+str(wine)
+```
+#table uses the cross-classifying factors to build a contingency table of the counts at each combination of factor levels.
+
+```{r}
+a=table(wine$citric.acid)
+a
+```
+#I defined which rows and column has to be shown as per my desired selections
+```{r}
+p=wine[c(5:15),c(1:5)]
+p
+```
+# Get or set the length of vectors (including lists) and factors, and of any other R object for which a method has been defined.
+```{r}
+length(wine)
+```
+#Returns the first or last parts of a vector, matrix, table, data frame or function. 
+```{r}
+head(wine)
+```
+#Returns the first or last parts of a vector, matrix, table, data frame or function. 
+```{r}
+tail(wine)
+```
+#  function density computes kernel density estimates. Its default method does so with the given kernel and bandwidth for univariate observations.
+
+```{r}
+j=wine$density
+print(j)
+```
+# max functions displays the maximum value occured in a dataset
+```{r}
+max(wine$quality)
+```
+# min functions displays the minimum value occured in a dataset
+```{r}
+min(wine$quality)
+
+```
+# mean displayes the mean value of desired column or row
+
+```{r}
+mean(wine$pH)
+```
+# dim funtions shows how many rows and columns are in my dataset
+```{r}
+dim(wine)
+```
+# I again showed the mean value of wine quality as a part of my exploration
+```{r}
+mean(wine$quality)
+```
+#sd funtions tells the standard deviation
+```{r}
+sd(wine$quality)
+
+```
+#he generic function hist computes a histogram of the given data values.
+```{r}
+hist(wine$total.sulfur.dioxide,col = "Blue",border = "red")
+```
+# Produce box-and-whisker plot(s) of the given (grouped) values.
+```{r}
+boxplot(wine[,0:7],main ='contents in wine',col = "green")
+```
+# Creates a bar plot with vertical or horizontal bars.
+```{r}
+wine = head(wine,n=20)
+barplot(wine$total.sulfur.dioxide,wine$free.sulfur.dioxide,xlab = "Total Sulfur dioxide",ylab = "Free Sulphur dioxide",col ="red")
+```
+#free sulfur dioxide means The amount of free SO2 needed is based on the pH of the wine
+
+# it showing the ph level of wine according to my dataset 
+```{r}
+pie(table(wine$pH),border = "Brown")
+```
+```{r}
+library(ISLR)
+attach (wine)
+pairs(wine)
+```
+
+```{r}
+head(wine)
+```
+```{r}
+cor(wine[,c(1:7)])
+```
+
+
+

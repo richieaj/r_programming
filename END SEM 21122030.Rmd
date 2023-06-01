@@ -1,0 +1,202 @@
+---
+title: "ENDSEM 21122030"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  word_document: default
+---
+
+
+```{r}
+df=read.csv("C:\\Users\\jolin\\OneDrive\\Desktop\\q3_CarPrice_Assignment - Copy.csv")
+```
+#read the dataset 
+
+```{r}
+head(df)
+```
+#viewing first 5 rows in the dataset 
+
+```{r}
+summary(df)
+```
+
+#Finding the total sum of null values present in the dataset, fortunately in this dataset we dont have any null values 
+```{r}
+sum(is.na(df))
+```
+
+#summary of the dataset 
+
+```{r}
+str(df)
+```
+```{r}
+library("ggplot2")
+gg=ggplot(df,aes(x=horsepower,y=compressionratio))+geom_point(aes(col= peakrpm))+geom_smooth(method="loess",se=F)+labs(subtitle = "HORSPOWER AFFECTING RPM",y="compressionratio",x="horsepower",title="Scatterplot",caption = "Source: POWER")
+plot(gg)
+```
+#In this scaterplot we can clearly see that some of the data has been pointed out the outliers has been found 
+
+```{r}
+library("ggplot2")
+gg=ggplot(df,aes(x=citympg ,y=highwaympg))+geom_point(aes(col= horsepower))+geom_smooth(method="loess",se=F)+labs(subtitle = "Milege",y="highwaympg",x="citympgr",title="Scatterplot",caption = "Source: POWER")
+plot(gg)
+```
+
+
+```{r}
+g<-ggplot(df,aes(horsepower,compressionratio,na.rm=TRUE)) 
+g+ geom_boxplot(varwidth = T,fill="plum")+
+  labs(subtitle="Horsepowe and Combustion capacity",y="compression ratio",x="Horsepower",title="boxplot",caption="Source:Carpredictins")
+```
+```{r}
+g<-ggplot(df,aes(peakrpm ,citympg ,na.rm=TRUE)) 
+g+ geom_boxplot(varwidth = T)+
+  labs(subtitle="Horsepowe and Combustion capacity",y="citympg ",x="peakrpmr",title="boxplot",caption="Source:Carpredictins")
+```
+
+```{r}
+str(df)
+```
+
+
+
+#In this boxplot we can clearly see that some of the data has been pointed out the outliers below and above the boxplot.  
+
+```{r}
+library("psych")
+describe(df)
+```
+#measured correlation of the two numeric columns in the dataset
+
+```{r}
+a=cor(df[,21:23])
+print(a)
+```
+
+```{r}
+library(corrplot)
+corrplot(a)
+```
+
+```{r}
+Model=lm(carwidth  ~ carheight,horsepower,data =df)
+summary(Model)
+```
+
+```{r}
+plot(Model)
+```
+```{r}
+Model1=lm(curbweight ~ stroke,boreratio,data =df)
+summary(Model1)
+```
+```{r}
+plot(Model1)
+```
+#Training and testing the data 
+
+```{r}
+library(caTools)
+set.seed(123)
+#Split ratio is 75:25
+split = sample.split(df$wheelbase, SplitRatio = 0.75)
+training_set = subset(df, split == TRUE)
+test_set = subset(df, split == FALSE)
+```
+
+
+#Decision tree 
+
+```{r}
+library(party)
+tree1=ctree(wheelbase ~carlength +carwidth +enginesize+boreratio +stroke+compressionratio+horsepower +peakrpm,data=df) #~target variable,predicting 
+tree1
+```
+```{r}
+library(rpart)
+mytree=rpart(wheelbase~.,data=df,method = "anova")
+mytree
+```
+
+```{r}
+library(rattle)
+library(RColorBrewer)
+fancyRpartPlot(mytree,caption=NULL,cex=0.5)
+```
+```{r}
+df=df[-(9)]
+```
+
+```{r}
+str(df)
+```
+
+
+```{r}
+pairs(df)
+```
+```{r}
+library(corrplot)
+
+corrplot(cor(df),
+  method = "number",
+  type = "upper" )
+```
+
+```{r}
+s=cor(df)
+print(s)
+```
+
+```{r}
+library(corrplot)
+corrplot(s)
+```
+```{r}
+df=df[-(15)]
+```
+
+```{r}
+str(df)
+```
+```{r}
+q=cor(df)
+print(q)
+library(corrplot)
+corrplot(q)
+```
+
+
+```{r}
+# Loading package
+library(e1071)
+library(caTools)
+library(caret)
+library(crosstable)
+library(gmodels)
+```
+
+
+
+#Naive bayes
+
+```{r}
+index = sample(2,nrow(df),prob = c(0.9,0.1),replace=TRUE) 
+set.seed(1234)
+train = df[index==1,]
+test = df[index==2,]
+test_data = test[1:4]
+test_label = test[,5]
+model=naiveBayes(train$horsepowe~.,train)
+model
+```
+```{r}
+test_result=predict(model,test_data)
+test_result
+```
+```{r}
+CrossTable(x=test_label, y=test_result)
+```

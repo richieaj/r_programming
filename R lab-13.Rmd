@@ -1,0 +1,86 @@
+---
+title: "LAB-13"
+author: "Jolinson Richi"
+date: "24/05/2022"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+---
+
+```{r}
+library(textstem)
+vector=c("run","ran","running","runns")
+lemmatize_words(vector)
+```
+
+```{r}
+library(tm)
+library(SnowballC)
+library(wordcloud)
+library(RColorBrewer)
+library(tidytext)
+```
+
+```{r}
+textpara=readLines(file.choose())
+textpara
+```
+```{r}
+docs<-Corpus(VectorSource(textpara))
+docs
+```
+
+```{r}
+inspect(docs)
+```
+
+```{r}
+sent=c("printed circuit board
+machine learning
+deep learning
+convolutional neural network
+computer vision
+optical inspection
+data augmentation
+inception
+defect detection
+image processing
+thresholding
+residual network
+feature pyramid
+ShuffleNetV2
+YOLO
+dual attention mechanism
+PAFPN
+bounding box regression loss function
+autoencoder
+manufacturing")
+sent
+```
+
+```{r}
+sentcorp=Corpus(VectorSource(sent))
+inspect(sentcorp)
+```
+
+```{r}
+docs<-tm_map(sentcorp,removeWords,stopwords("english"))
+inspect(docs)
+```
+
+```{r}
+dtm<-TermDocumentMatrix(docs)
+m<-as.matrix(dtm)
+v=sort(rowSums(m),decreasing = TRUE)
+d=data.frame(word=names(v),freq=v)
+head(d,10)
+```
+
+```{r}
+library(tm)
+library(wordcloud)
+wordcloud(word=d$word,freq=d$freq,min.freq=1,
+          max.words=200,random.order=FALSE,rot.per=0.35,
+          colours=brewer.pal(8,"Dark2"))
+```

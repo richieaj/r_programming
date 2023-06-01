@@ -1,0 +1,328 @@
+---
+title: "Group_Project"
+author: "HABIS_K_V , ELAKKIYA R"
+date: "5 May 2022"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+*ABOUT THE DATASET*
+
+The two datasets are related to red variants of the Portuguese "Vinho Verde" wine.
+
+Input variables (based on physicochemical tests):
+
+1 - fixed acidity
+
+2 - volatile acidity
+
+3 - citric acid
+
+4 - residual sugar
+
+5 - chlorides
+
+6 - free sulfur dioxide
+
+7 - total sulfur dioxide
+
+8 - density
+
+9 - pH
+
+10 - sulphates
+
+11 - alcohol
+
+Output variable (based on sensory data):
+
+12 - quality (score between 0 and 10)
+
+
+*Inspiration*
+
+Use modelling to determine which physiochemical properties make a wine 'good'!
+
+
+
+*IMPORT THE DATASET*
+```{r}
+wine_df=read.csv("F:/SEMESTER 2/R PROGRAMMING/winequality-red.csv")
+head(wine_df)
+```
+
+
+*Structure of the Dataset*
+
+```{r}
+str(wine_df)
+```
+
+
+
+*Summary of the Dataset*
+
+```{r}
+summary(wine_df)
+```
+
+
+*Dimension*
+
+```{r}
+dim(wine_df)
+```
+
+
+*Checking for missing values/Cleaning the data*
+
+```{r}
+head(is.na(wine_df))
+```
+
+```{r}
+sum(is.na(wine_df))
+```
+
+*Inference*
+The dataset is clean and has no missing values.
+
+
+*Variance*
+
+Variance measures how far a data set is spread out.
+
+
+```{r}
+for(i in colnames(wine_df))
+{
+  print(i)
+  print(var(wine_df[[i]]))}
+
+```
+
+
+
+
+
+```{r}
+library(dplyr)
+wine_df %>% summarise_if(is.numeric,var)
+```
+
+
+*STANDARD DEVIATION*
+
+
+```{r}
+wine_df %>% summarise_if(is.numeric,sd)
+```
+
+
+*RANGE*
+
+
+```{r}
+wine_df %>% summarise_if(is.numeric,range)
+```
+
+*VISUALIZATION*
+
+```{r}
+v = wine_df$density
+hist(v,xlab = "Density",col = "Blue",border = "yellow")
+
+```
+```{r}
+v = wine_df$fixed.acidity
+hist(v,xlab = "Fixed Acidity",col = "Green",border = "blue")
+
+```
+
+
+```{r}
+boxplot(wine_df$volatile.acidity)
+```
+
+```{r}
+library("ggplot2")
+gg=ggplot(wine_df,aes(x=quality,y=alcohol))+geom_point(aes(col= density))+geom_smooth(method="loess",se=F)+labs(subtitle = "Quality Vs Alcohol",y="alcohol",x="quality",title="Scatterplot",caption = "Source: Wine_prediction")
+plot(gg)
+```
+
+
+```{r}
+g<-ggplot(wine_df,aes(quality,density,na.rm=TRUE)) 
+g+ geom_boxplot(varwidth = T,fill="plum")+
+  labs(subtitle="Quality vs Contents",y="density",x="Quality",title="boxplot",caption="Source:Wine_prediction")
+```
+
+```{r}
+plot(wine_df, col="navy", main="Matrix Scatterplot")
+
+```
+
+```{r}
+pairs(wine_df)
+```
+
+```{r}
+library(corrplot)
+wine_df1= select(wine_df,-quality)
+correlations = cor(wine_df1)
+corrplot(correlations)
+```
+
+```{r}
+ggplot(wine_df, aes(x = density, y = quality)) + geom_point(aes(color = pH))
+```
+
+```{r}
+library("psych")
+describe(wine_df)
+```
+
+
+The describe() function is used to generate descriptive statistics that summarize the central tendency, dispersion and shape of a dataset's distribution, excluding NaN values.
+Also the describe function is inside the psych library so we have to install that library first before using it.
+
+**The correlation between 2 variables is found with the cor() function.**
+
+
+*Correlation between Quality and fixed acidity*
+
+Correlation is a statistical measure that expresses the extent to which two variables are linearly related 
+
+
+```{r}
+cor(wine_df$quality,wine_df$fixed.acidity)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$volatile.acidity)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$citric.acid)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$residual.sugar)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$chlorides)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$free.sulfur.dioxide)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$total.sulfur.dioxide)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$density)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$pH)
+```
+```{r}
+cor(wine_df$quality,wine_df$sulphates)
+```
+```{r}
+cor(wine_df$quality,wine_df$alcohol)
+```
+
+
+*INFERENCE*
+
+**Note that the correlation between variables X and Y is equal to the correlation between variables Y and X so the order of the variables in the cor() function does not matter.**
+
+**First of all, correlation ranges from -1 to 1. It gives us an indication on two things:**
+
+**The direction of the relationship between the 2 variables**
+**The strength of the relationship between the 2 variables**
+**Regarding the direction of the relationship: On the one hand, a negative correlation implies that the two variables under consideration vary in opposite directions, that is, if a variable increases the other decreases and vice versa. On the other hand, a positive correlation implies that the two variables under consideration vary in the same direction, i.e., if a variable increases the other one increases and if one decreases the other one decreases as well.**
+
+**Regarding the strength of the relationship: The more extreme the correlation coefficient (the closer to -1 or 1), the stronger the relationship. This also means that a correlation close to 0 indicates that the two variables are independent, that is, as one variable increases, there is no tendency in the other variable to either decrease or increase.**
+
+Alcohol has the highest correlation.
+
+
+**CORRELATION MATRIX**
+
+```{r}
+library(corrplot)
+
+corrplot(cor(wine_df),
+  method = "number",
+  type = "upper" )
+```
+
+```{r}
+library(party)
+tree1=ctree(quality~fixed.acidity +volatile.acidity+citric.acid+residual.sugar+chlorides +free.sulfur.dioxide+total.sulfur.dioxide+density +pH+sulphates+alcohol,data=wine_df) #~target variable,predicting 
+tree1
+```
+
+```{r}
+library(rpart)
+mytree=rpart(quality~.,data=wine_df,method="class")
+mytree
+```
+
+```{r}
+library(rattle)
+library(RColorBrewer)
+fancyRpartPlot(mytree,caption=NULL)
+```
+
+
+*MODEL*
+
+
+```{r}
+Model=lm(quality ~ density,total.sulfur.dioxide,pH, data =wine_df)
+summary(Model)
+```
+
+```{r}
+Model=lm(quality ~ volatile.acidity+chlorides, data =wine_df)
+summary(Model)
+```
+
+```{r}
+Model=lm(quality ~ sulphates+citric.acid, data =wine_df)
+summary(Model)
+```
+```{r}
+Model=lm(quality ~ alcohol,sulphates,data =wine_df)
+summary(Model)
+```
+
+*INFERENCE*
+
+Call: Predictor- Alcohol and Sulphates
+      Target- Quality of the wine
+      
+Residuals: Residuals are essentially the difference between the actual observed response values and the response
+           values that the model predicted. The Residuals section of the model output breaks it down into 5 summary              points.
+           
+           
+Coefficients: The next section in the model output talks about the coefficients of the model. Theoretically, in simple               linear regression, the coefficients are two unknown constants that represent the intercept and slope                  terms in the linear model.
+
+
+Residual Standard Error: Residual Standard Error is measure of the quality of a linear regression fit. Theoretically,                          every linear model is assumed to contain an error term E. Due to the presence of this error                           term, we are not capable of perfectly predicting our response variable from the predictor                             one. The Residual Standard Error is the average amount that the response will deviate from                            the true regression line.
+
+R-squared - Goodness of fit.
+
+
+**CONCLUSION**
+
+ ALCOHOL is the main factor that increase the quality of Red Wine.
+ 

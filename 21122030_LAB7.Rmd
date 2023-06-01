@@ -1,0 +1,166 @@
+---
+title: "21122030_JOLINSON RICHI"
+output:
+  word_document: default
+  html_notebook: default
+  html_document:
+    df_print: paged
+---
+
+ 
+
+```{r}
+song= read.csv("D:\\AJR\\RfrML\\spotify\\songs_normalize.csv")
+song
+
+```
+```{r}
+str(song)
+```
+```{r}
+summary(song)
+```
+```{r}
+dim(song)
+```
+```{r}
+head(is.na(song))
+```
+```{r}
+sum(is.na(song))
+```
+```{r}
+for(i in colnames(song))
+{
+  print(i)
+  print(var(song[[i]]))}
+```
+```{r}
+library(dplyr)
+song %>% summarise_if(is.numeric,var)
+```
+```{r}
+song %>% summarise_if(is.numeric,sd)
+```
+```{r}
+v = song$danceability
+hist(v,xlab = "danceability",col = "Blue",border = "yellow")
+```
+```{r}
+v = song$duration_ms
+hist(v,xlab = "duration_ms",col = "Green",border = "blue")
+```
+```{r}
+boxplot(song$popularity)
+```
+```{r}
+library("ggplot2")
+gg=ggplot(song,aes(x=popularity,y=danceability))+geom_point(aes(col= danceability))+geom_smooth(method="loess",se=F)+labs(subtitle = "Popularity vs dancability",y="danceability",x="popularity",title="Scatterplot",caption = "hit song prediction")
+plot(gg)
+```
+```{r}
+g<-ggplot(song,aes(popularity,danceability,na.rm=TRUE)) 
+g+ geom_boxplot(varwidth = T,fill="plum")+
+  labs(subtitle="Famous songs that moves you",y="danceability",x="popularity",title="boxplot",caption="MTV")
+```
+```{r}
+plot(song, col="navy", main="Matrix Scatterplot")
+```
+```{r}
+colnames(song)
+```
+
+```{r}
+#song <- song[,-14]
+head(song)
+```
+
+
+
+
+
+```{r}
+library(party)
+tree1=ctree(popularity~danceability +instrumentalness+speechiness+mode+loudness ,data=song) #~target variable,predicting 
+tree1
+```
+```{r}
+library(rpart)
+mytree=rpart(popularity~.,data=song,method="class")
+mytree
+```
+```{r}
+library(rattle)
+library(RColorBrewer)
+fancyRpartPlot(mytree,caption=NULL,cex=0.65)
+```
+```{r}
+install.packages("ClusterR")
+install.packages("cluster")
+library("ClusterR")
+library("cluster")
+```
+```{r}
+songs <- song[, -5]
+set.seed(240) # Setting seed
+kmeans.re <- kmeans(songs, centers = 3, nstart = 20)
+kmeans.re
+```
+```{r}
+cm <- table(song$loudness, kmeans.re$cluster)
+head(cm)
+```
+```{r}
+plot(songs[c("year", "popularity")])
+plot(songs[c("year", "popularity")], 
+     col = kmeans.re$cluster)
+plot(songs[c("year", "popularity")], 
+     col = kmeans.re$cluster, 
+     main = "K-means with 3 clusters")
+```
+```{r}
+kmeans.re$centers
+kmeans.re$centers[, c("year", "popularity")]
+```
+```{r}
+library("ggplot2")
+library("dplyr")
+library("ggfortify")
+```
+
+
+```{r}
+y_kmeans <- kmeans.re$cluster
+clusplot(songs[, c("year", "popularity")],
+         y_kmeans,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels = 5,
+         plotchar = FALSE,
+         span = TRUE,
+         main = paste("Cluster songs"),
+         ylab = 'popularity',
+         xlab = 'year')
+```
+```{r}
+wssplot <- function(songs, nc=15, seed=1234){
+  wss <- (nrow(data)-1)*sum(apply(data,2,var))
+  for (i in 2:nc){
+    set.seed(seed)
+    wss[i] <- sum(kmeans(songs, centers=i)$withinss)}
+  plot(1:nc, wss, type="b", xlab="Number of Clusters",
+       ylab="Within groups sum of squares")
+  wss
+}
+wssplot
+```
+
+```{r}
+kmean <- kmeans(songs, 3)
+kmean$centers
+```
+```{r}
+autoplot(kmean,songs, frame = TRUE)
+```
+

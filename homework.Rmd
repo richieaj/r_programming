@@ -1,0 +1,86 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(textstem)
+vector<-c("run","ran","running","runns")
+lemmatize_words(vector)
+library(tm)
+library(SnowballC)
+library(wordcloud)
+library(RColorBrewer)
+library(tidytext)
+```
+
+```{r}
+text<-readLines(file.choose())
+```
+
+```{r}
+text
+```
+
+```{r}
+install.packages("textstem")
+library(textstem)
+text=readLines((file.choose()))
+text
+
+text<-c("I love Football.Ronaldo is my favourite Player.Ronaldo plays for Manchester United and for Portugal.Ronaldo is the best.Ronaldo spends money i=on many luxurious products.")
+text
+```
+
+```{r}
+library(tm)
+Sent=c("I love football","Messi is a great football player","Messi has won seven Ball ")
+sentcorp=Corpus(VectorSource(Sent))
+inspect(sentcorp)
+```
+
+```{r}
+dtm<-TermDocumentMatrix(sentcorp)
+m=as.matrix(dtm)
+v=sort(rowSums(m),decreasing = TRUE)
+d=data.frame(word=names(v),freq=v)
+head(d,10)
+```
+
+```{r}
+library(wordcloud)
+set.seed(1234)
+wordcloud(words=d$word,freq=d$freq,min.freq=1,
+          max.words = 200,random.order = FALSE,rot.per = 0.35,colors = brewer.pal(8,"Dark2"))
+```
+
+```{r}
+text=readLines((file.choose()))
+```
+
+```{r}
+text
+ ```
+
+```{r}
+textcorp=Corpus(VectorSource(text))
+inspect(textcorp)
+```
+
+```{r}
+dm<-TermDocumentMatrix(textcorp)
+m=as.matrix(dm)
+v=sort(rowSums(m),decreasing = TRUE)
+d=data.frame(word=names(v),freq=v)
+head(d,10)
+```
+
+```{r}
+set.seed(1234)
+wordcloud(words=d$word,freq=d$freq,min.freq=1,
+          max.words = 200,random.order = FALSE,rot.per = 0.35,colors = brewer.pal(8,"Dark2"))
+```
+
+```{r}
+s = tm_map(text,removePunctuation)
+```

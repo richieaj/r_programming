@@ -1,0 +1,112 @@
+---
+title: "R Notebook"
+Name: "21122030_Jolinson Richi A"
+Class: "2MscDs"
+---
+
+
+```{r}
+#creating a vector gender and inserting the male and female count
+#rep will repeat the word female and male 10 and 16 times , factor will convert the vector into factor.?gender<-factor(c(rep("female",10),rep("male",16)))
+table(gender)
+```
+```{r}
+#In this vector we are swaping the male and female count by using the command 
+
+#In this code, we use the term "levels" to access the level of the attribute.The term "factor" is us?d to encode the vector as a factor (i.e) it is used to categorize or enumerate the function and the table function counts and categorize it
+
+gender<-factor(gender,levels=c("male","female"))
+table(gender)
+```
+
+```{r}
+#In this code, we use the term as in the?previous question but because of the case sensitive in the code the "Male" part doesn't taken into account
+gender<-factor(gender,levels=c("Male","female"))
+table(gender)
+
+
+```
+```{r}
+rm(gender) # rm will remove the given variable
+```
+
+
+*QUESTION 2*
+# Crest? a blank matrix by user input
+```{r}
+nrow=readline(prompt="no.of rows:")
+ncol=readline(prompt="no.of column:")
+x=matrix(,as.integer(nrow),as.integer(ncol))
+print(x)
+```
+*Question-3*
+# Add and subytract the even elements in the matrix
+```{r}
+a=11:16
+mat_a=m?trix(a,nrow=3)#creating a matrix a
+mat_a
+b=1:6
+mat_b=matrix(b,nrow=3)#creating a matrix b
+mat_b
+c=(mat_a+mat_b)#adding two matix
+c
+d=(mat_a-mat_b)#subtracting two matrix
+d
+```
+```{r}
+#Question-4:
+# Create a vector and matrix and list:
+list_data=list(Name=c?"Jackson","Chuck billy","Rambo","Hitler"),mat=matrix(1:15,nrow=3),Subject=list("Maths","R programming","python","machine learning"))
+list_data
+```
+
+
+```{r}
+# find the length
+length(list_data)
+```
+```{r}
+#	Print the count of objects Add a new element to the?list named 'Test'.with "test1".
+Test=c(Test="test1")
+list_data=c(list_data,c(Test))
+list_data
+```
+```{r}
+#	Now print the number of objects
+length(list_data)
+#Remove the second object from the list.
+a=list_data[-2]
+a
+#Name the objects in the new list
+names(?ist_data)
+#	Print the length of the first two components of the list
+length(list_data[1:2])
+length(list_data$Name)
+length(list_data$Subject)
+```
+```{r}
+#5.	Create a data frame Stud_Score with variables Reg_No, Name,Marks ,Grade
+#'Grade' contains the values?'S','F'
+#Enter details for 10 students
+reg_no=paste(c("ID_"),1:10,sep="")
+name=c("Rambo","James Hetfield","hitler","Chuck Billy","Belphegor","Behemoth","Akaphalos","Lucifer","Micheal","angel")
+marks=c(90,85,75,66,84,67,50,49,46,78)
+grade=c('s','s','f','f',?s','f','f','f','f','f')
+stud_score=data.frame(reg_no,name,marks,grade)
+stud_score
+
+```
+
+```{r}
+#Write a R program to get the statistical summary and nature of the data of a given data frame.
+summary(stud_score)
+
+```
+
+```{r}
+#Find the numbers of students wh? have obtained the grade 'S'
+a=subset(stud_score,grade=="s")
+a
+length(a)
+```
+

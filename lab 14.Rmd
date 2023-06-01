@@ -1,0 +1,299 @@
+---
+title: "21122030_jolinsonrichi"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r}
+wine_df=read.csv("D:\\AJR\\RfrML\\Wine dataset\\winequality-red.csv")
+head(wine_df)
+```
+
+
+*Structure of the Dataset*
+
+```{r}
+str(wine_df)
+```
+
+
+
+*Summary of the Dataset*
+
+```{r}
+summary(wine_df)
+```
+
+
+*Dimension*
+
+```{r}
+dim(wine_df)
+```
+
+
+*Checking for missing values/Cleaning the data*
+
+```{r}
+head(is.na(wine_df))
+```
+
+```{r}
+sum(is.na(wine_df))
+```
+
+*Inference*
+The dataset is clean and has no missing values.
+
+
+*Variance*
+
+Variance measures how far a data set is spread out.
+
+
+```{r}
+for(i in colnames(wine_df))
+{
+  print(i)
+  print(var(wine_df[[i]]))}
+
+```
+
+
+
+
+
+```{r}
+library(dplyr)
+wine_df %>% summarise_if(is.numeric,var)
+```
+
+
+*STANDARD DEVIATION*
+
+
+```{r}
+wine_df %>% summarise_if(is.numeric,sd)
+```
+
+
+*RANGE*
+
+
+```{r}
+wine_df %>% summarise_if(is.numeric,range)
+```
+
+*VISUALIZATION*
+
+
+
+
+
+
+
+```{r}
+library("ggplot2")
+gg=ggplot(wine_df,aes(x=quality,y=alcohol))+geom_point(aes(col= density))+geom_smooth(method="loess",se=F)+labs(subtitle = "Quality Vs Alcohol",y="alcohol",x="quality",title="Scatterplot",caption = "Source: Wine_prediction")
+plot(gg)
+```
+
+
+```{r}
+g<-ggplot(wine_df,aes(quality,density,na.rm=TRUE)) 
+g+ geom_boxplot(varwidth = T,fill="plum")+
+  labs(subtitle="Quality vs Contents",y="density",x="Quality",title="boxplot",caption="Source:Wine_prediction")
+```
+
+```{r}
+plot(wine_df, col="navy", main="Matrix Scatterplot")
+
+```
+
+```{r}
+pairs(wine_df)
+```
+
+```{r}
+library(corrplot)
+wine_df1= select(wine_df,-quality)
+correlations = cor(wine_df1)
+corrplot(correlations)
+```
+
+
+
+```{r}
+library("psych")
+describe(wine_df)
+```
+
+
+
+```{r}
+cor(wine_df$quality,wine_df$fixed.acidity)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$volatile.acidity)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$citric.acid)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$residual.sugar)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$chlorides)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$free.sulfur.dioxide)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$total.sulfur.dioxide)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$density)
+```
+
+```{r}
+cor(wine_df$quality,wine_df$pH)
+```
+```{r}
+cor(wine_df$quality,wine_df$sulphates)
+```
+```{r}
+cor(wine_df$quality,wine_df$alcohol)
+```
+
+
+```{r}
+a=cor(wine_df)
+a
+```
+```{r}
+library(corrplot)
+corrplot(a)
+
+```
+```{r}
+library(caTools)
+library(car)
+```
+
+
+
+
+
+*MODEL*
+```{r}
+M=lm(quality ~ alcohol,data = wine_df)
+summary(M)
+```
+
+```{r}
+library(ggplot2)
+Model_lm_graph <-ggplot(wine_df, aes(x=quality, y=alcohol))+geom_point()
+Model_lm_graph 
+library(ggpubr)
+Model_lm_graph <- Model_lm_graph + geom_smooth(method="lm", col="red")
+Model_lm_graph <- Model_lm_graph +
+  stat_regline_equation(label.x = 3, label.y = 7)
+Model_lm_graph
+```
+
+```{r}
+M1=lm(quality ~ sulphates,data = wine_df)
+summary(M1)
+```
+```{r}
+library(ggplot2)
+Model1_lm_graph <-ggplot(wine_df, aes(x=quality, y=sulphates))+geom_point()
+Model1_lm_graph 
+library(ggpubr)
+Model1_lm_graph <- Model1_lm_graph + geom_smooth(method="lm", col="red")
+Model1_lm_graph <- Model1_lm_graph +
+  stat_regline_equation(label.x = 3, label.y = 7)
+Model1_lm_graph
+```
+
+```{r}
+M2=lm(quality ~ volatile.acidity,data = wine_df)
+summary(M2)
+```
+```{r}
+library(ggplot2)
+Model2_lm_graph <-ggplot(wine_df, aes(x=quality, y=volatile.acidity))+geom_point()
+Model2_lm_graph 
+library(ggpubr)
+Model2_lm_graph <- Model2_lm_graph + geom_smooth(method="lm", col="red")
+Model2_lm_graph <- Model2_lm_graph +
+  stat_regline_equation(label.x = 3, label.y = 7)
+Model2_lm_graph
+```
+
+```{r}
+M3=lm(quality ~ chlorides,data = wine_df)
+summary(M3)
+```
+```{r}
+library(ggplot2)
+Model3_lm_graph <-ggplot(wine_df, aes(x=quality, y=chlorides))+geom_point()
+Model3_lm_graph 
+library(ggpubr)
+Model3_lm_graph <- Model3_lm_graph + geom_smooth(method="lm", col="red")
+Model3_lm_graph <- Model3_lm_graph +
+  stat_regline_equation(label.x = 3, label.y = 7)
+Model3_lm_graph
+```
+
+
+
+
+
+
+
+```{r}
+Model=lm(quality ~ alcohol+sulphates+volatile.acidity+chlorides+pH,data =wine_df)
+summary(Model)
+```
+```{r}
+plot(Model)
+```
+
+```{r}
+library(car)
+vif(Model)
+```
+```{r}
+library(caTools)
+set.seed(123)
+#Split ratio is 75:25
+split = sample.split(wine_df$alcohol, SplitRatio = 0.75)
+training_set = subset(wine_df, split == TRUE)
+test_set = subset(wine_df, split == FALSE)
+```
+
+```{r}
+training_set[-3] = scale(training_set[-3])
+test_set[-3] = scale(test_set[-3])
+library(e1071)
+## Warning: package 'e1071' was built under R version 4.1.3
+classifier = svm(formula = alcohol ~ .,
+ data = training_set,
+ type = 'C-classification',
+ kernel = 'linear')
+```
+
+
+
+
+

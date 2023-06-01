@@ -1,0 +1,68 @@
+---
+title: "Naive bayess_21122030"
+output:
+  word_document: default
+  html_notebook: default
+---
+
+
+```{r}
+# Loading data
+data(iris)
+  
+# Structure
+str(iris)
+```
+```{r}
+
+# Loading package
+library(e1071)
+library(caTools)
+library(caret)
+library(crosstable)
+library(gmodels)
+
+# Splitting data into train
+# and test data
+split <- sample.split(iris, SplitRatio = 0.7)
+train_cl <- subset(iris, split == "TRUE")
+test_cl <- subset(iris, split == "FALSE")
+
+# Feature Scaling
+train_scale <- scale(train_cl[, 1:4])
+test_scale <- scale(test_cl[, 1:4])
+
+# Fitting Naive Bayes Model
+# to training dataset
+set.seed(120) # Setting Seed
+classifier_cl <- naiveBayes(Species ~ ., data = train_cl)
+classifier_cl
+
+# Predicting on test data'
+y_pred <- predict(classifier_cl, newdata = test_cl)
+
+# Confusion Matrix
+cm <- table(test_cl$Species, y_pred)
+cm
+```
+```{r}
+index = sample(2,nrow(iris),prob = c(0.9,0.1),replace=TRUE) 
+set.seed(1234)
+train = iris[index==1,]
+test = iris[index==2,]
+test_data = test[1:4]
+test_label = test[,5]
+model=naiveBayes(train$Species~.,train)
+model
+```
+```{r}
+test_result=predict(model,test_data)
+test_result
+```
+```{r}
+CrossTable(x=test_label, y=test_result)
+```
+```{r}
+#We can see that our model has successfully predicted all rows belonging to setosa and virginica correctly. It has, however, misclassified a row belonging to Versicolor as virginica. The accuracy of the model is 93.75%
+```
+

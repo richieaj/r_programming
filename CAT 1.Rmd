@@ -1,0 +1,167 @@
+---
+title: "JOLINSON RICHI_21122030"
+output:
+  word_document: default
+  html_notebook: default
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+#Q A PICK THE DATASET 
+
+```{r}
+library(readxl)
+scl <- read_excel("C:/Users/jolin/Downloads/Q3.csv.xlsx")
+scl
+```
+#Q-A 
+#LOAD THE DATASET AND DISPLAY 12 ROWS ANDN USE APPROPRIATE PLOTS AND SUMMARISING METHODS TO STUDY THE DATASET 
+
+```{r}
+head(scl,12)
+```
+
+```{r}
+n=summary(scl)
+print(n)
+```
+```{r}
+str(scl)
+```
+```{r}
+e=table(scl$n_student)
+print(e)
+```
+```{r}
+p=scl[c(5:15),c(1:5)]
+p
+```
+```{r}
+length(scl)
+```
+```{r}
+j=scl$student_id
+print(j)
+```
+```{r}
+scl=head(scl,n=30)
+hist(scl$pretest,col = "Blue",border = "red",main = "No of students",xlab = "Pretest")
+```
+```{r}
+scl=head(scl,n=30)
+hist(scl$posttest,col = "red",border = "black",main = "No of students",xlab = "Posttest")
+```
+
+
+```{r}
+scl = head(scl,n=20)
+barplot(scl$pretest,scl$posttest,xlab = "Pre-Test",ylab = "Post-Test",col ="brown")
+```
+```{r}
+pie(table(scl$gender),border = "Brown")
+```
+```{r}
+pie(table(scl$pretest,scl$posttest),border = "Brown")
+```
+
+
+#B 
+# 1. FIND THE MEAN AND MEDIAN OF THE PRETEST AND POSTTEST MARKS 
+
+```{r}
+mean(scl$pretest)
+```
+```{r}
+median(scl$pretest)
+```
+
+```{r}
+mean(scl$posttest)
+```
+```{r}
+median(scl$posttest)
+```
+#SORT DATABASED ON THE POSTTEST MARKS IN ASCENDING ORDER 
+
+```{r}
+post_asc=scl[order(as.integer(scl$posttest),decreasing = FALSE), ]
+post_asc
+```
+#SAVE IT AS post_asc AND PRETEST IN DESCENDING ORDER AND SAVE IT AS pre_dsc
+
+```{r}
+pre_dsc=scl[order(as.integer(scl$pretest),decreasing = TRUE), ]
+pre_dsc
+```
+# 5. CREATE A NEW COLUMN PERCENTAGE WITH THE VALUE [(POSTTEST+PRETEST)/200]*100
+
+```{r}
+w=scl$pretest+scl$posttest
+x=w/200
+v=x*100
+scl$percentage=v
+scl
+```
+# 5. CREATE A NEW COLUMN AVERAGE WITH THE VALUE [(POSTTEST+PRETEST)/200]
+
+```{r}
+d=scl$pretest+scl$posttest
+t=w/200
+scl$Average=t
+scl
+```
+
+
+
+# Q-C Create a matrix of 3 rows and 4 columns. Find the transpose of the matrix, What is total sum, mean of all elements of the matrix, print the range of the matrix 
+
+#created a matrix of 3x4
+
+```{r}
+f <- matrix(c(1:12), nrow = 3, ncol = 4)
+f
+```
+#transpose of my matrix M 
+
+```{r}
+t(f)
+```
+#mean of matrix f
+
+```{r}
+mean(f)
+```
+# I seperately found the row means
+
+```{r}
+rowMeans(f)
+```
+# here same but column mean 
+
+```{r}
+colMeans(f)
+```
+#sum of the matrix
+
+```{r}
+sum(f)
+```
+#column sum of the nmatrix 
+
+```{r}
+colSums(f)
+```
+#row sum of the matrix 
+
+```{r}
+rowSums(f)
+```
+# printing the range of values present in the matrix 
+```{r}
+a=range(f)
+print(a)
+```
+
+
+
